@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset = "UTF-8">
+  <title>hello</title>
+   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+</head>
+<body>
+<h1>10パズル</h1>
+<input class="fig-text" type="text" name="" value="" placeholder="" id="t1">
+<input class="fig-text" type="text" name="" value="" placeholder="" id="t2">
+<input class="fig-text" type="text" name="" value="" placeholder="" id="t3">
+<input class="fig-text" type="text" name="" value="" placeholder="" id="t4">
+<button id = "calculate">Calculate</button>
+<script>
+  $(function(){
+    //四則演算子の配列
+    var obj = ["+","-","*","/"];
+    //取得する数字
+    var fig = [];
+    //()付きの式
+    var formula = ["(abc)defg","ab(cde)fg","abcd(efg)","(abc)d(efg)","(abcde)fg","ab(cdefg)",""];
+
+
+      $("#calculate").click(function(){
+        var answer = {
+          a:"",
+          b:""
+        }
+
+        _getVal();
+        answer.a = _tenFormula("abcdefg");
+        answer.b = _tenFormulaParent();
+        alert("()なしの式では" + answer.a + "()ありの式では" + answer.b);
+      });
+
+      //値の取得
+      function _getVal(){
+        for (var i = 0;i < $(".fig-text").length;i++){
+          fig.push($(".fig-text").eq(i).val());
+        }
+      }
+
+      //10になるかどうか検索
+      function _tenFormula(e){
+        e = e.replace("a",fig[0]);
+        e = e.replace("c",fig[1]);
+        e = e.replace("e",fig[2]);
+        e = e.replace("g",fig[3]);
+
+        var tenFormula = {
+          str1:"",
+          str2:"",
+          str3:""
+        };
+
+        tenFormula.str1 = e;
+
+        for (var i = 0;i < 4;i++){
+          e = tenFormula.str1;
+          e = e.replace("b",obj[i]);
+          tenFormula.str2 = e;
+          for (var j = 0;j < 4;j++){
+            e = tenFormula.str2;
+            e = e.replace("d",obj[j]);
+            tenFormula.str3 = e;
+            for (var k = 0;k < 4;k++){
+              e = tenFormula.str3;
+              e = e.replace("f",obj[k]);
+              if (eval(e) == 10){
+                return e;
+              }
+            }
+          }
+        }
+      }
+
+      //10になるかどうか検索(()あり)
+      function _tenFormulaParent(){
+         for (i = 0;i < formula.length;i++){
+          return _tenFormula(formula[i]);
+
+        }
+
+      }
+
+
+  });
+</script>
+</body>
+</html>
